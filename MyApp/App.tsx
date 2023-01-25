@@ -50,50 +50,24 @@ function App(): JSX.Element {
   }
 
   const[Items,setItems]=useState([
-    {name:'item 1'},
-    {name:'item 2'},
-    {name:'item 3'},
-    {name:'item 4'},
-    {name:'item 5'},
-    {name:'item 6'},
-    {name:'item 7'},
-    {name:'item 50'},
-    {name:'item 60'},
-    {name:'item 70'},
-    {name:'item 80'},
-    {name:'item 90'}
-
-
+    {title:'Title One',data:['item 2-1','item 2-2','item 2-3']},
   ])
 
-  const DATA=[
-    {
-      title:'Tile One',
-      data:['Item 1-1','Item 1-2','Item 1-3'],
-
-    },
-    {
-      title:'Tile TWO',
-      data:['Item 2-1','Item 2-2','Item 2-3'],
-
-    },
-    {
-      title:'Tile THREE',
-      data:['Item 3-1','Item 3-2','Item 3-3'],
-
-    },
-    {
-      title:'Tile FOUR',
-      data:['Item 4-1','Item 4-2','Item 4-3'],
-
-    },
-  ]
-
+  
   const[Refreshing,setRefreshing]=useState(false)
   const onRefresh =() =>
   {
     setRefreshing(true);
-    setItems([...Items,{name:'Key is 69'}]);
+    const adding_index = Items.length + 1;
+    setItems([...Items,{
+      title: 'Title ' + adding_index,
+      data:
+      [
+        'Item ' + adding_index + '-1',
+        'Item ' + adding_index + '-2'
+      ],
+    }]);
+
     setRefreshing(false);
 
   }
@@ -122,7 +96,7 @@ function App(): JSX.Element {
     <SectionList
     //what is key extractor doing?
     keyExtractor={(item,index)=>index.toString()}
-    sections={DATA}
+    sections={Items}
     //to display items use render item 
     renderItem={({item})=>(
         
@@ -134,9 +108,21 @@ function App(): JSX.Element {
         renderSectionHeader={({section})=>
         <View style={styles.item}>
         <Text style={styles.text}> {section.title} </Text>
+        
         {/* here internal array items are being displayed item.name karnay ki zaroorat nahin */}
+
 </View>
+
+        
 }
+
+
+refreshControl={
+  <RefreshControl
+    refreshing={ Refreshing}
+      onRefresh={onRefresh}
+      colors={['#ff00ff']}
+  />}
 
     />
 
