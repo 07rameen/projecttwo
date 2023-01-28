@@ -5,6 +5,7 @@ import {
   Button,
   FlatList,
   Linking,
+  Pressable,
   RefreshControl,
   SafeAreaView,
   ScrollView,
@@ -13,6 +14,9 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableHighlight,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
   useColorScheme,
   View,
 } from 'react-native';
@@ -36,6 +40,12 @@ function App(): JSX.Element {
   };
 
   const [name,setname]=useState('');
+  const[submitted,SetSubmitted]=useState(false);
+  const onPresshandler=()=>
+  { 
+    SetSubmitted(!submitted);
+
+  }
 
   
   return ( 
@@ -53,9 +63,46 @@ function App(): JSX.Element {
       >
 
       </TextInput>
+      {/* <Button title={submitted? 'Clear':'Submit'}
+      onPress={onPresshandler}
+      disabled={submitted}
+        
+      /> */}
+      {/* TouchableOpacity , TouchableHighlight , Touchable without feeback */}
+      {/* <TouchableWithoutFeedback
+      style={styles.button}
+      onPress={onPresshandler}
+      // activeOpacity={0.9} 
+      // underlayColor='#ddd'>
+      >
       <Text style={styles.text}> 
-      Your name is : {name}
+      {submitted? 'Clear':'Submit'}</Text>
+      </TouchableWithoutFeedback> */}
+<Pressable
+        onPress={onPresshandler}
+        hitSlop={{ top: 10, bottom: 10, right: 10, left: 10 }}
+        android_ripple={{color:'#00f'}}
+        style={({ pressed }) => [
+          { backgroundColor: pressed ? '#dddddd' : '#00ff00' },
+          styles.button
+        ]}
+      >
+
+      <Text style={styles.text}> 
+      {submitted? 'Clear':'Submit'}</Text>
+
+      </Pressable>
+      
+      
+      {submitted?
+       <Text style={styles.text}> 
+      You are registered as : {name}
        </Text>
+       :
+       null
+      }
+      
+     
     </View>
 
   );
@@ -84,6 +131,13 @@ const styles = StyleSheet.create({
    fontSize: 20,
    fontStyle: 'italic',
   },
+  button:
+  {
+    width:150,
+    height:50,
+    backgroundColor:'#00ff00',
+    alignItems:'center'
+  }
 });
 
 export default App;
