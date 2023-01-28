@@ -2,6 +2,7 @@
 import React , {useState} from 'react';
 import type {PropsWithChildren} from 'react';
 import {
+  Alert,
   Button,
   FlatList,
   Linking,
@@ -14,6 +15,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableHighlight,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -43,7 +45,17 @@ function App(): JSX.Element {
   const[submitted,SetSubmitted]=useState(false);
   const onPresshandler=()=>
   { 
+    if(name.length>3)
+    {
     SetSubmitted(!submitted);
+    }
+    else{
+      // Alert.alert('Warning','The name must be longer than 3 characters',[{text:'Do not show again',onPress:()=>console.warn('Do not show Pressed!'),style:'destructive'},
+      // {text:'Cancel',onPress:()=>console.warn('Cancel Pressed!'),style:'destructive'},
+      // {text:'Ok',onPress:()=>console.warn('Ok Pressed!'),style:'destructive'}],
+      // {cancelable:true,onDismiss:()=>console.warn('Alert Dismissed')})
+      ToastAndroid.show('Name must be longer than 3 characters',ToastAndroid.SHORT);
+    }
 
   }
 
