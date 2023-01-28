@@ -7,6 +7,9 @@ import {
   FlatList,
   Linking,
   Pressable,
+  Image,
+  ImageBackground,
+  Modal,
   RefreshControl,
   SafeAreaView,
   ScrollView,
@@ -43,6 +46,7 @@ function App(): JSX.Element {
 
   const [name,setname]=useState('');
   const[submitted,SetSubmitted]=useState(false);
+  const [showWarning, SetshowWarning] = useState(false);
   const onPresshandler=()=>
   { 
     if(name.length>3)
@@ -50,105 +54,149 @@ function App(): JSX.Element {
     SetSubmitted(!submitted);
     }
     else{
-      // Alert.alert('Warning','The name must be longer than 3 characters',[{text:'Do not show again',onPress:()=>console.warn('Do not show Pressed!'),style:'destructive'},
-      // {text:'Cancel',onPress:()=>console.warn('Cancel Pressed!'),style:'destructive'},
-      // {text:'Ok',onPress:()=>console.warn('Ok Pressed!'),style:'destructive'}],
-      // {cancelable:true,onDismiss:()=>console.warn('Alert Dismissed')})
-      ToastAndroid.show('Name must be longer than 3 characters',ToastAndroid.SHORT);
+      SetshowWarning(true);
     }
 
   }
 
   
   return ( 
-    <View style={styles.body}>
-      <Text style={styles.text}> 
-      Please Write Your Name:
-       </Text>
-      <TextInput style={styles.input} placeholder='e.g Rameen'
-      onChangeText={(value)=>setname(value)}
-      // keyboardType='default'
-      // maxLength={3}
-      // editable={false}
-      // secureTextEntry
-      
+    <ImageBackground
+      style={styles.body}
+      source={{ uri: 'https://cdn.pixabay.com/photo/2013/07/12/12/35/texture-145968_960_720.png' }}
+    >
+      <Modal
+        visible={showWarning}
+        transparent
+        onRequestClose={() =>
+          SetshowWarning(false)
+        }
+        animationType='slide'
+        hardwareAccelerated
       >
-
-      </TextInput>
-      {/* <Button title={submitted? 'Clear':'Submit'}
-      onPress={onPresshandler}
-      disabled={submitted}
-        
-      /> */}
-      {/* TouchableOpacity , TouchableHighlight , Touchable without feeback */}
-      {/* <TouchableWithoutFeedback
-      style={styles.button}
-      onPress={onPresshandler}
-      // activeOpacity={0.9} 
-      // underlayColor='#ddd'>
-      >
-      <Text style={styles.text}> 
-      {submitted? 'Clear':'Submit'}</Text>
-      </TouchableWithoutFeedback> */}
-<Pressable
+        <View style={styles.centered_view}>
+          <View style={styles.warning_modal}>
+            <View style={styles.warning_title}>
+              <Text style={styles.text}>WARNING!</Text>
+            </View>
+            <View style={styles.warning_body}>
+              <Text style={styles.text}>The name must be longer than 3 charachters</Text>
+            </View>
+            <Pressable
+              onPress={() => SetshowWarning(false)}
+              style={styles.warning_button}
+              android_ripple={{ color: '#fff' }}
+            >
+              <Text style={styles.text}>OK</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+      <Text style={styles.text}>
+        Please write your name:
+      </Text>
+      <TextInput
+        style={styles.input}
+        placeholder='e.g. John'
+        onChangeText={(value) => setname(value)}
+      />
+      <Pressable
         onPress={onPresshandler}
         hitSlop={{ top: 10, bottom: 10, right: 10, left: 10 }}
-        android_ripple={{color:'#00f'}}
+        android_ripple={{ color: '#00f' }}
         style={({ pressed }) => [
           { backgroundColor: pressed ? '#dddddd' : '#00ff00' },
           styles.button
         ]}
       >
-
-      <Text style={styles.text}> 
-      {submitted? 'Clear':'Submit'}</Text>
-
+        <Text style={styles.text}>
+          {submitted ? 'Clear' : 'Submit'}
+        </Text>
       </Pressable>
-      
-      
-      {submitted?
-       <Text style={styles.text}> 
-      You are registered as : {name}
-       </Text>
-       :
-       null
+      {
+        submitted ?
+          <View style={styles.body}>
+            <Text style={styles.text}>
+              You are registered as {name}
+            </Text>
+            <Image
+              style={styles.image}
+              source={require('./android/app/src/error.png')}
+              resizeMode='stretch'
+            />
+          </View>
+          :
+          <Image
+            style={styles.image}
+            source={{ uri: 'https://cdn.pixabay.com/photo/2018/01/04/15/51/404-error-3060993_960_720.png' }}
+            resizeMode='stretch'
+          />
       }
-      
-     
-    </View>
-
+    </ImageBackground >
   );
-}
+};
 
 const styles = StyleSheet.create({
-  body:
-  {
-  flex:1,
-  alignItems:'center',
-  backgroundColor: '#ffffff',
+  body: {
+    flex: 1,
+    alignItems: 'center',
   },
-  input:
-  {
-    width:200,
-    borderWidth:1,
-    borderColor:'#555',
-    borderRadius:5,
-    alignItems:'center',
+  text: {
+    color: '#000000',
     fontSize: 20,
+    margin: 10,
+    textAlign: 'center',
   },
-  text:
-  {
-   color: '#000',
-   margin: 10,
-   fontSize: 20,
-   fontStyle: 'italic',
+  input: {
+    width: 200,
+    borderWidth: 1,
+    borderColor: '#555',
+    borderRadius: 5,
+    textAlign: 'center',
+    fontSize: 20,
+    marginBottom: 10,
   },
-  button:
-  {
-    width:150,
-    height:50,
-    backgroundColor:'#00ff00',
-    alignItems:'center'
+  button: {
+    width: 150,
+    height: 50,
+    alignItems: 'center',
+  },
+  centered_view: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#00000099'
+  },
+  warning_modal: {
+    width: 300,
+    height: 300,
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#000',
+    borderRadius: 20,
+  },
+  warning_title: {
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ff0',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+  },
+  warning_body: {
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  warning_button: {
+    backgroundColor: '#00ffff',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    margin: 10,
   }
 });
 
