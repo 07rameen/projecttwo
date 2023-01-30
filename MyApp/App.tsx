@@ -29,12 +29,12 @@ import {
 import {
   Colors,
   DebugInstructions,
-  Header,
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import { counterEvent } from 'react-native/Libraries/Performance/Systrace';
-
+import RameenButton from './CustomButton';
+import Header from './Header';
 
 
 function App(): JSX.Element {
@@ -65,6 +65,7 @@ function App(): JSX.Element {
       style={styles.body}
       source={{ uri: 'https://cdn.pixabay.com/photo/2013/07/12/12/35/texture-145968_960_720.png' }}
     >
+      <Header/>
       <Modal
         visible={showWarning}
         transparent
@@ -74,6 +75,7 @@ function App(): JSX.Element {
         animationType='slide'
         hardwareAccelerated
       >
+        
         <View style={styles.centered_view}>
           <View style={styles.warning_modal}>
             <View style={styles.warning_title}>
@@ -100,7 +102,19 @@ function App(): JSX.Element {
         placeholder='e.g. John'
         onChangeText={(value) => setname(value)}
       />
-      <Pressable
+      <RameenButton
+        onPressFunction={onPresshandler}
+        title={submitted ? 'Clear' : 'Submit'}
+        color={'#00ff'}
+      />
+      <RameenButton
+        onPressFunction={onPresshandler}
+        title={'Test'}
+        color={'#00ff00'}
+        style={{margin:10}}
+      />
+
+      {/* <Pressable
         onPress={onPresshandler}
         hitSlop={{ top: 10, bottom: 10, right: 10, left: 10 }}
         android_ripple={{ color: '#00f' }}
@@ -112,7 +126,7 @@ function App(): JSX.Element {
         <Text style={styles.text}>
           {submitted ? 'Clear' : 'Submit'}
         </Text>
-      </Pressable>
+      </Pressable> */}
       {
         submitted ?
           <View style={styles.body}>
